@@ -1,0 +1,2 @@
+C:\Users\Арина\source\repos\Структура данных\Debug\Структура данных.exe
+C:\Users\Арина\source\repos\Структура данных\Debug\Структура данных.pdb
