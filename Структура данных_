@@ -1,0 +1,150 @@
+#include <iostream>
+#include <string>
+using namespace std;
+struct Student
+{
+	void Show()
+	{
+		cout <<famil << name << endl << number << endl << group << endl << mar1 << " " << mar2 << " " << mar3 << endl;
+	}
+	string famil, name;
+	long long int number;
+	int group, mar1, mar2, mar3;
+};
+void CorNumb(Student*& st, int n, int k)
+{
+	system("chcp 1251>nul");
+	int mar01 = -1, mar02 = -1, mar03 = -1, gr = -1;
+	for (int i = k; i < n; i++)
+	{
+		cout << endl << "Введите ФИО: ";
+		cin >> st[i].famil; getline(cin, st[i].name);
+		cout << endl << "Введите номер телефона: ";
+		cin >> st[i].number;
+		while (gr <= 0)
+		{
+			cout << endl << "Введите группу: "; cin >> gr;
+			if (gr <= 0)
+			{
+				cout << "Введены некорректные данные, введите номер группы снова. " << endl;
+			}
+			st[i].group = gr;
+		}
+		cout << "Введите оценки по трём основным предметам:\n ";
+		while ((mar01 <= 0 || mar01 >= 6) || (mar02 <= 0 || mar02 >= 6) || (mar03 <= 0 || mar03 >= 6))
+		{
+			cout << "Математика:\t"; cin >> mar01;
+			cout << "Информатика:\t"; cin >> mar02;
+			cout << "Русский язык:\t"; cin >> mar03;
+			if ((mar01 <= 0 || mar01 >= 6) || (mar02 <= 0 || mar02 >= 6) || (mar03 <= 0 || mar03 >= 6))
+			{
+				cout << "Введены некорректные данные, введите оценки снова." << endl;
+			}
+			st[i].mar1 = mar01;
+			st[i].mar2 = mar02;
+			st[i].mar3 = mar03;
+		}
+		mar01 = -1, mar02 = -1, mar03 = -1, gr = -1;
+	}
+}
+
+void deletion(Student*& st, int gr, int sr_a, int& n)
+{
+	int i = 0;
+	while ( i < n ) 
+	{
+		if ((st[i].group == gr) && (st[i].mar1 + st[i].mar2 + st[i].mar3) / 3 < sr_a)
+		{
+			for (int j = i; j < n - 1; j++)
+			{
+				st[i].famil = st[i + 1].famil;
+			    st[i].name = st[i + 1].name;
+				st[i].number = st[i + 1].number;
+				st[i].group = st[i + 1].group;
+				st[i].mar1 = st[i + 1].mar1;
+				st[i].mar2 = st[i + 1].mar2;
+				st[i].mar3 = st[i + 1].mar3;
+			}
+			i--;
+			n--;
+		}
+		i++;
+	}
+}
+
+void addition(Student*& st, int& n , string Sname)
+{
+	int f = 0;
+	for (int i = 0; i < n; i++)
+	{
+		if (st[i].famil == Sname)
+		{
+			f++;
+			for (int j = n+1; j>i; j--)
+			{
+				st[j].famil = st[j - 1].famil;
+				st[j].name = st[j - 1].name;
+				st[j].number = st[j - 1].number;
+				st[j].group = st[j - 1].group;
+				st[j].mar1 = st[j - 1].mar1;
+				st[j].mar2 = st[j - 1].mar2;
+				st[j].mar3 = st[j - 1].mar3;
+			}
+			cout << "Введите параметры нового студента" << endl;
+			CorNumb(st, i + 2, i + 1);
+			
+		}
+	}
+	if (f == 0)
+	{
+		cout << "Введённой фамилии нет в списке студентов" << endl;
+	}
+}
+int main()
+{
+	system("color F0");
+	system("chcp 1251>nul");
+    int n = 0;
+    while (n <= 0)
+	{
+	   cout << "Введите количество студентов ";
+	   cin >> n;
+	}
+	cout << endl;
+	Student* st = new Student[n+1];
+	CorNumb(st, n, 0);
+	int gr = 0;
+	while (gr <= 0)
+	{
+		cout << "Введите номер группы, из которой необходимо удалить элементы: ";
+		cin >> gr;
+	}
+	cout << endl;
+	float sr_a = 0;
+	while (sr_a <= 0 || sr_a>= 6)
+	{
+		cout << "Введите среднее арифметическое оценок: ";
+		cin >> sr_a;
+	}
+	cout << endl;
+	deletion(st, gr, sr_a, n);
+
+	string Sname;
+	cout << endl << "Введите фамилию после которой нужно вставить элемент: \t";
+	cin >> Sname;
+	if (n == 0)
+	{
+		cout << "Добавление невозможно!" << endl;
+	}
+	else
+	{
+		addition(st, n, Sname);
+		cout << endl << endl;
+		for (int i = 0; i < n + 1; i++)
+		{
+			st[i].Show();
+			cout << endl;
+		}
+	}
+	return 0;
+}
